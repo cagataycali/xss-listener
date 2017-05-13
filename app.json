@@ -1,0 +1,12 @@
+{
+  "name": "xss-listener",
+  "description": "Have your own open-source xss listener.",
+  "repository": "https://github.com/cagataycali/xss-listener",
+  "logo": "https://cagatay.js.org/spider.png",
+  "keywords": ["xss", "pentest", "steal cookie with xss", "exploit cookie with cookie", "cookie", "xss cookie stealing"],
+  "website": "https://cagatay.me",
+  "env": {
+    "TELEGRAM_TOKEN": null,
+    "TELEGRAM_USER_ID": null
+  }
+}

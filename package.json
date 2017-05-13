@@ -1,0 +1,17 @@
+{
+  "name": "xss-listener",
+  "version": "1.0.0",
+  "description": "Have your own open-source xss listener.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Çağatay ÇALI",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "nedb": "^1.8.0",
+    "node-telegram-bot-api": "^0.27.1"
+  }
+}
