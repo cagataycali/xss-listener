@@ -20,10 +20,11 @@ bot.onText(/\/delete (.+)/, (msg, match) => {
     db.remove({}, { multi: true }, function (err, numRemoved) {
       bot.sendMessage(chatId, numRemoved);
     });
+  } else {
+    db.remove({ _id: resp }, {}, (err, numRemoved) => {
+      bot.sendMessage(chatId, numRemoved);
+    });
   }
-  db.remove({ _id: resp }, {}, (err, numRemoved) => {
-    bot.sendMessage(chatId, numRemoved);
-  });
 });
 
 // List gained rows ..
