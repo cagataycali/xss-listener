@@ -16,6 +16,11 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
 // Delete row ..
 bot.onText(/\/delete (.+)/, (msg, match) => {
   const resp = match[1]; // TODO @cagatay check the id is string, prevent nosql object injection.
+  if (msg.text.endsWith('all')) {
+    db.remove({}, { multi: true }, function (err, numRemoved) {
+      bot.sendMessage(chatId, numRemoved);
+    });
+  }
   db.remove({ _id: resp }, {}, (err, numRemoved) => {
     bot.sendMessage(chatId, numRemoved);
   });
