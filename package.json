@@ -1,6 +1,6 @@
 {
   "name": "xss-listener",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Have your own open-source xss listener.",
   "main": "index.js",
   "scripts": {
