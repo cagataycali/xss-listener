@@ -30,7 +30,16 @@ bot.onText(/\/delete (.+)/, (msg, match) => {
 // List gained rows ..
 bot.onText(/\/list/, (msg) => {
   db.find({}, {}, (err, docs) => {
-    bot.sendMessage(chatId, '  🤙 here is your awesome xss request\'s list.. 👻 ``` \n' + JSON.stringify(docs, null,'\t') + ' \n ``` If you want to delete one of them, /delete [_id] 👍🏿 ', {parse_mode:'Markdown'});
+    console.log(typeof docs)
+    console.log(docs)
+    bot.sendMessage(chatId, '  🤙 here is your awesome xss request\'s list.. 👻 ``` \n' + JSON.stringify(docs, null,'\t') + ' \n ``` If you want to delete one of them, /delete [_id] 👍🏿 ', {parse_mode:'Markdown'}).catch(err => {
+      if (err.code === 'ETELEGRAM' && err.response.body.description === 'Bad Request: message is too long') {
+        bot.sendMessage(chatId, 'Too many docs for one message, sending them one by one.');
+        for (let i = 0; i < docs.length; i++) {
+          bot.sendMessage(chatId, JSON.stringify(docs[i], null, '\t'));
+        }
+      }
+    });
   });
 });
 
