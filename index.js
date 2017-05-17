@@ -22,7 +22,7 @@ bot.onText(/\/delete (.+)/, (msg, match) => {
     });
   } else {
     db.remove({ _id: resp }, {}, (err, numRemoved) => {
-      bot.sendMessage(chatId, `Removed ${numRemoved} entries from the db`);
+      bot.sendMessage(chatId, numRemoved);
     });
   }
 });
