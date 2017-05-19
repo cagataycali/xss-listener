@@ -9,8 +9,8 @@
   "author": "Çağatay ÇALI",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
     "nedb": "^1.8.0",
     "node-telegram-bot-api": "^0.27.1"
   }
