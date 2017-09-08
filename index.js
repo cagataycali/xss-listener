@@ -85,7 +85,13 @@ function getFromSlack(message) {
         db.remove({}, {
           multi: true
         }, function (err, numRemoved) {
-          SlackWebhook.send(`Removed ${numRemoved} entries from the db`, );
+          SlackWebhook.send(`Removed ${numRemoved} entries from the db`, (err, header, statusCode, body) => {
+            if (err) {
+              console.log('Error:', err);
+            } else {
+              console.log('Received', statusCode, 'from Slack');
+            }
+          });
         });
       } else {
         db.remove({
