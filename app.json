@@ -7,6 +7,8 @@
   "website": "https://cagatay.me",
   "env": {
     "TELEGRAM_TOKEN": null,
-    "TELEGRAM_USER_ID": null
+    "TELEGRAM_USER_ID": null,
+    "SLACK_HOOK_URL": null,
+    "SLACK_RTM_TOKEN": null
   }
 }
