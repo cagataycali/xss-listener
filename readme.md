@@ -2,7 +2,7 @@
 
 ### 🕷️ XSS Listener is a penetration tool for easy to steal data with various XSS.
 
-From now on, you do not need XSS listeners! XSS listener records the data you have stolen on the remote site in the database, and gives instant notification with telegram.
+From now on, you do not need XSS listeners! XSS listener records the data you have stolen on the remote site in the database, and gives instant notification with telegram / slack.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/cagataycali/xss-listener)
 
@@ -41,7 +41,7 @@ Form: { cookie:'PHPSESSID=889c6594db2541db1666cefca7537373' }
 ### 🕸️ Delete previous request by id
 <code>https://yourapp.com/delete/[id]</code>
 
-### 🕸️ Even you can use telegram
+### 🕸️ Even you can use telegram (and / or Slack!)
 
 <code>/list</code>
 
@@ -55,8 +55,10 @@ In terminal,
 git clone https://github.com/cagataycali/xss-listener.git; # Clone
 cd xss-listener; # Change directory.
 npm install; # Install dependencies.
+cp .env.example .env
+# Fill in .env with required values.
 # Fill bot token and user id.
-TELEGRAM_TOKEN=[BOT TOKEN] TELEGRAM_USER_ID=[USER ID] node index.js
+node index.js
 ```
 
 ### License
