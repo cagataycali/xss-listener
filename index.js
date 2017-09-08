@@ -1,40 +1,48 @@
 const express = require('express');
 const app = express();
+require('dotenv').config()
 const Datastore = require('nedb');
 const db = new Datastore({filename: 'out.db', autoload: true});
 const bodyParser = require('body-parser');
-const TelegramBot = require('node-telegram-bot-api');
-
+const Telegram = require('node-telegram-bot-api');
+const SlackIncomingWebhook = require('@slack/client').IncomingWebhook;
+let SlackWebhook;
+let chatId;
+let TelegramBot;
 // Middleware usage ..
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('port', (process.env.PORT || 5000));
-
-const chatId = process.env.TELEGRAM_USER_ID;
-const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
+if (process.env.SLACK_HOOK_URL) {
+  SlackWebhook = new SlackIncomingWebhook(process.env.SLACK_HOOK_URL || '');
+}
+if (process.env.TELEGRAM_TOKEN && process.env.TELEGRAM_USER_ID) {
+  chatId = process.env.TELEGRAM_USER_ID;
+  TelegramBot = new Telegram(process.env.TELEGRAM_TOKEN, {polling: true});
+}
 
 // Delete row ..
-bot.onText(/\/delete (.+)/, (msg, match) => {
+TelegramBot.onText(/\/delete (.+)/, (msg, match) => {
   const resp = match[1]; // TODO @cagatay check the id is string, prevent nosql object injection.
   if (msg.text.endsWith('all')) {
     db.remove({}, {multi: true}, function (err, numRemoved) {
-      bot.sendMessage(chatId, `Removed ${numRemoved} entries from the db`);
+      TelegramBot.sendMessage(chatId, `Removed ${numRemoved} entries from the db`);
     });
   } else {
     db.remove({_id: resp}, {}, (err, numRemoved) => {
-      bot.sendMessage(chatId, `Removed ${numRemoved} entry from the db`);
+      TelegramBot.sendMessage(chatId, `Removed ${numRemoved} entry from the db`);
     });
   }
 });
 
 // List gained rows ..
-bot.onText(/\/list/, (msg) => {
+TelegramBot.onText(/\/list/, (msg) => {
   db.find({}, {}, (err, docs) => {
-    bot.sendMessage(chatId, '  🤙 here is your awesome xss request\'s list.. 👻 ``` \n' + JSON.stringify(docs, null, '\t') + ' \n ``` If you want to delete one of them, /delete [_id] 👍🏿 ', {parse_mode: 'Markdown'}).catch(err => {
+    TelegramBot.sendMessage(chatId, '  🤙 here is your awesome xss request\'s list.. 👻 ``` \n' + JSON.stringify(docs, null, '\t') + ' \n ``` If you want to delete one of them, /delete [_id || all] 👍🏿 ', {parse_mode: 'Markdown'}).catch(err => {
       if (err.code === 'ETELEGRAM' && err.response.body.description === 'Bad Request: message is too long') {
-        bot.sendMessage(chatId, 'Too many docs for one message, sending them one by one.');
+        TelegramBot.sendMessage(chatId, 'Too many docs for one message, sending them one by one.');
         for (let i = 0; i < docs.length; i++) {
-          bot.sendMessage(chatId, JSON.stringify(docs[i], null, '\t'));
+          TelegramBot.sendMessage(chatId, JSON.stringify(docs[i], null, '\t'));
         }
       }
     });
@@ -42,9 +50,20 @@ bot.onText(/\/list/, (msg) => {
 });
 
 // Ping - Pong!
-bot.on('message', (msg) => {
-  bot.sendMessage(chatId, `I'm awake! Your chat ID: ${chatId}, don't forget add in your code 🕷`);
+TelegramBot.on('message', (msg) => {
+  TelegramBot.sendMessage(chatId, `I'm awake! Your chat ID: ${chatId}, don't forget add in your code 🕷`);
 });
+
+// Send message to slack with data.
+function sendToSlack(doc) {
+  SlackWebhook.send(' 🤘🏿 new baby on board! 👻 ``` \n' + JSON.stringify(doc, null, '\t') + ' \n ```', (err, header, statusCode, body) => {
+    if (err) {
+      console.log('Error:', err);
+    } else {
+      console.log('Received', statusCode, 'from Slack');
+    }
+  });
+}
 
 // Collect all routes
 app.all('/:path*?', (req, res, next) => {
@@ -58,7 +77,12 @@ app.all('/:path*?', (req, res, next) => {
     };
     db.insert(doc, (err, newDoc) => {
       if (newDoc && !err) {
-        bot.sendMessage(chatId, ' 🤘🏿 new baby on board! 👻 ``` \n' + JSON.stringify(doc, null, '\t') + ' \n ```', {parse_mode: 'Markdown'});
+        if (TelegramBot) {
+          TelegramBot.sendMessage(chatId, ' 🤘🏿 new baby on board! 👻 ``` \n' + JSON.stringify(doc, null, '\t') + ' \n ```', {parse_mode: 'Markdown'});
+        }
+        if (SlackWebhook) {
+          sendToSlack(doc);
+        }
         res.json(doc);
       } else {
         res.json(err);
