@@ -9,7 +9,7 @@
   "author": "Çağatay ÇALI",
   "license": "MIT",
   "dependencies": {
-    "@slack/client": "^3.12.0",
+    "@slack/client": "^4.0.0",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
