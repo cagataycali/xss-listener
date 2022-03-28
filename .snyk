@@ -1,8 +1,10 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.14.1
+version: v1.22.1
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   SNYK-JS-LODASH-567746:
     - node-telegram-bot-api > request-promise > request-promise-core > lodash:
         patched: '2020-05-04T06:54:55.275Z'
+    - snyk > snyk-nodejs-lockfile-parser > @yarnpkg/core > lodash:
+        patched: '2022-03-28T16:04:38.415Z'
