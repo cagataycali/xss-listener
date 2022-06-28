@@ -20,7 +20,7 @@
     "express": "^4.15.3",
     "nedb": "^1.8.0",
     "node-telegram-bot-api": "^0.27.1",
-    "snyk": "^1.317.0"
+    "snyk": "^1.680.0"
   },
   "snyk": true
 }
